@@ -3,7 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 
 
-export const login = () => {
+export const Login = () => {
    const onFinish = (values) => {
         console.log('Received values of form: ', values);
   };
