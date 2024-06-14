@@ -1,23 +1,30 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
 
 class Usuario(models.Model):
     dni = models.CharField(max_length=8)
     nombres = models.CharField(max_length=75)
     apellidoPat = models.CharField(max_length=50)
     apellidoMat = models.CharField(max_length=50)
-    nombreUsuario = models.CharField(max_length=20)
     correo = models.EmailField()
-    contraseña = models.CharField(max_length=8)
-    tipoUsuario = models.CharField(max_length=1) #Tipo p= profesor B=bibliotecario
-    fechaCreada = models.DateTimeField(auto_now_add=True)     
+    contraseña = models.CharField(max_length=128)
+    fechaCreada = models.DateTimeField(auto_now_add=True)
+    estado = models.IntegerField(default=1)
     
-    
+    def save(self, *args, **kwargs):
+        if self.pk is None or 'contraseña' in self.changed_data:  # Solo encriptamos si es nuevo o si se cambia la contraseña
+            self.contraseña = make_password(self.contraseña)
+        super().save(*args, **kwargs)
+        
+    def check_password(self, password):
+        return check_password(password, self.contraseña)
     
 class Alumno(models.Model):
     dni = models.CharField(max_length=8)
     nombres = models.CharField(max_length=75)
     apellidoPat = models.CharField(max_length=50)
     apellidoMat = models.CharField(max_length=50)
+    estado = models.IntegerField(default=1)
 
 class Libro(models.Model):
     isbn = models.CharField(max_length=13)
@@ -25,7 +32,7 @@ class Libro(models.Model):
     autor = models.CharField(max_length=50)
     categoria = models.CharField(max_length=50)
     cantidad = models.IntegerField(default=0)
-    disponibilidad = models.BooleanField(default=True)
+    estado = models.IntegerField(default=1)
     
 class Reserva(models.Model):
     fechaReserva = models.DateField()

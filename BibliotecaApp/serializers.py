@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from rest_framework import serializers
 from .models import Alumno, Libro, Notificacion, Prestamo, Reporte, Reserva, Usuario
 
@@ -27,11 +28,83 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReservaSerializer(serializers.ModelSerializer):
+    usuarioReserva = UsuarioSerializer()  # Nested serializer for Usuario
+    libroReserva = LibroSerializer()  # Nested serializer for Libro
+
     class Meta:
         model = Reserva
         fields = '__all__'
 
+class ReservaCreateSerializer(serializers.Serializer):
+    isbn = serializers.CharField(max_length=13)
+    dni = serializers.CharField(max_length=8)
+    fechaReserva = serializers.DateField(required=False)
+
+    def create(self, validated_data):
+        isbn = validated_data['isbn']
+        dni = validated_data['dni']
+
+        # Buscar libro y usuario
+        try:
+            libro = Libro.objects.get(isbn=isbn)
+        except Libro.DoesNotExist:
+            raise serializers.ValidationError("Libro no encontrado.")
+
+        try:
+            usuario = Usuario.objects.get(dni=dni)
+        except Usuario.DoesNotExist:
+            raise serializers.ValidationError("Usuario no encontrado.")
+
+        # Establecer fechas, usar fecha actual y una fecha de devolución por defecto (e.g., 14 días después)
+        fecha_reserva = validated_data.get('fechaReserva', date.today())
+
+        # Crear prestamo
+        reserva = Reserva.objects.create(
+            libroReserva=libro, 
+            usuarioReserva=usuario, 
+            fechaReserva=fecha_reserva,
+            estado='reservado'  # Asigna un estado por defecto
+        )
+        return reserva
+
 class PrestamoSerializer(serializers.ModelSerializer):
+    usuarioPrestado = UsuarioSerializer()  # Nested serializer for Usuario
+    libroPrestado = LibroSerializer()  # Nested serializer for Libro
     class Meta:
         model = Prestamo
         fields = '__all__'
+        
+class PrestamoCreateSerializer(serializers.Serializer):
+    isbn = serializers.CharField(max_length=13)
+    dni = serializers.CharField(max_length=8)
+    fechaPrestamo = serializers.DateField(required=False)
+    fechaDevolucion = serializers.DateField(required=False)
+
+    def create(self, validated_data):
+        isbn = validated_data['isbn']
+        dni = validated_data['dni']
+
+        # Buscar libro y usuario
+        try:
+            libro = Libro.objects.get(isbn=isbn)
+        except Libro.DoesNotExist:
+            raise serializers.ValidationError("Libro no encontrado.")
+
+        try:
+            usuario = Usuario.objects.get(dni=dni)
+        except Usuario.DoesNotExist:
+            raise serializers.ValidationError("Usuario no encontrado.")
+
+        # Establecer fechas, usar fecha actual y una fecha de devolución por defecto (e.g., 14 días después)
+        fecha_prestamo = validated_data.get('fechaPrestamo', date.today())
+        fecha_devolucion = validated_data.get('fechaDevolucion', date.today() + timedelta(days=14))
+
+        # Crear prestamo
+        prestamo = Prestamo.objects.create(
+            libroPrestado=libro, 
+            usuarioPrestado=usuario, 
+            fechaPrestamo=fecha_prestamo, 
+            fechaDevolucion=fecha_devolucion,
+            estado='pendiente'  # Asigna un estado por defecto
+        )
+        return prestamo
