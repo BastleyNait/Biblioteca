@@ -277,6 +277,88 @@ document
         }
       });
   });
+// FORM LIBROS
+document
+  .getElementById("libroForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+
+    // Capturar los datos del formulario
+    const ibsn = document.getElementById("ISBN").value;
+    const titulo = document.getElementById("titulo").value;
+    const autor = document.getElementById("autor").value;
+    const categoria = document.getElementById("categoria").value;
+    const cantidad = document.getElementById("cantidad").value;
+   
+    // Crear el objeto de datos
+    const libroData = { 
+      isbn: ibsn,
+      titulo: titulo,
+      autor: autor,
+      categoria: categoria,
+      cantidad: cantidad,
+    }
+    console.log(libroData.ibsn);
+    console.log(libroData.titulo);
+    console.log(libroData.autor);
+    console.log(libroData.categoria);
+    console.log(libroData.cantidad);
+
+    // Realizar el fetch con el método POST
+    fetch("http://127.0.0.1:5000/libros/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(libroData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 400) {
+            return response.json().then((errorData) => {
+              // Mostrar un mensaje específico para el error 400
+              Swal.fire({
+                icon: "error",
+                title: "Error 400",
+                text: "Solicitud incorrecta: " + JSON.stringify(errorData),
+              });
+              throw new Error("Error 400: " + JSON.stringify(errorData));
+            });
+          } else {
+            // Manejar otros errores
+            return response.json().then((errorData) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error " + response.status,
+                text: "Hubo un problema: " + JSON.stringify(errorData),
+              });
+              throw new Error(
+                "Error " + response.status + ": " + JSON.stringify(errorData)
+              );
+            });
+          }
+        }
+        return response.json(); // Parsear la respuesta si es exitosa
+      })
+      .then((data) => {
+        Swal.fire({
+          title: "¡Éxito!",
+          text: "Libro agregado exitosamente",
+          icon: "success",
+        });
+        // Aquí puedes manejar la respuesta exitosa del servidor
+      })
+      .catch((error) => {
+        // Aquí puedes manejar los errores de la red y otros errores
+        if (!error.message.includes("Error 400")) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Hubo un problema con la solicitud: " + error.message,
+          });
+        }
+      });
+  });
 /* 
 
     const contenedorProductos = document.querySelector("#contenedor-productos");
