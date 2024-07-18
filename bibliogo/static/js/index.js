@@ -2,11 +2,12 @@
 
 const libros = [];
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:8000/libros/")
+  fetch("http://127.0.0.1:5000/libros/")
     .then((response) => response.json())
     .then((data) => {
       const contenedorLibros = document.querySelector("#librosContenedor");
       data.forEach((libro) => {
+        console.log(libro); 
         libros.push(libro);
         const tr = document.createElement("tr");
         /* tr.classList.add("producto"); */
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //  TABLA ALUMNOS
 const alumnos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:8000/alumnos/")
+  fetch("http://127.0.0.1:5000/alumnos/")
     .then((response) => response.json())
     .then((data) => {
       const contenedoralumnos = document.querySelector("#alumnosContenedor");
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* const alumnos = [];
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:8000/alumnos/")
+  fetch("http://127.0.0.1:5000/alumnos/")
     .then((response) => response.json())
     .then((data) => {
       const contenedoralumnos = document.querySelector("#alumnosContenedor");
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 const prestamos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:8000/prestamos/")
+  fetch("http://127.0.0.1:5000/prestamos/")
     .then((response) => response.json())
     .then((data) => {
       const contenedorprestamos = document.querySelector("#prestamosContenedor");
@@ -142,7 +143,7 @@ document
     console.log(prestamoData.dni);
 
     // Realizar el fetch con el método POST
-    fetch("http://127.0.0.1:8000/prestamos/", {
+    fetch("http://127.0.0.1:5000/prestamos/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -222,7 +223,7 @@ document
     console.log(alumnoData.apellidoMat);
 
     // Realizar el fetch con el método POST
-    fetch("http://127.0.0.1:8000/alumnos/", {
+    fetch("http://127.0.0.1:5000/alumnos/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

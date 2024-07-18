@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block content %}
+
+
+ <!-- Table Start -->
+ <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+          <h6 class="mb-4">Alumnos</h6>
+          <table class="table table-hover" class="table-responsive" >
+            <thead>
+              <tr>
+                <th scope="col">DNI</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellido paterno</th>
+                <th scope="col">Apellido materno</th>
+              </tr>
+            </thead>
+            <tbody id="alumnosContenedor">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+          <h6 class="mb-4">Prestamos</h6>
+          <table class="table table-hover" class="table-responsive" >
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Libro</th>
+                <th scope="col">Fecha de prestamo</th>
+                <th scope="col">Fecha de devolucion</th>
+              </tr>
+            </thead>
+            <tbody id="prestamosContenedor">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+              <h6 class="mb-4">Libros</h6>
+              <table class="table table-hover" class="table-responsive" >
+                <thead>
+                  <tr>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">TITULO</th>
+                    <th scope="col">AUTOR</th>
+                    <th scope="col">CATEGORIA</th>
+                    <th scope="col">CANTIDAD</th>
+                  </tr>
+                </thead>
+                <tbody id="librosContenedor">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+  <!-- Table End -->
+
+{% endblock %}

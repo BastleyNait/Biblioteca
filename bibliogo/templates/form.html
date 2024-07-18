@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+
+
+
+{% block content %}
+ <!-- Form Start -->
+ <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Prestamo de Libro</h6>
+                <form id="prestamoForm">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Codigo Libro</label>
+                        <input class="form-control" id="isbn" name="isbn"
+                            aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">DNI del usuario</label>
+                        <input id="dni" name="dni" class="form-control" >
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">
+                    Agregar alumno
+                </h6>
+                <form id="alumnoForm"> 
+                    <div class="form-floating mb-3">
+                        <input id="identificacion"  class="form-control" 
+                            placeholder="name@example.com">
+                        <label for="floatingInput">DNI</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="nombres" class="form-control" 
+                            placeholder="Password">
+                        <label for="floatingPassword">Nombres</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="apellidoPat" class="form-control" 
+                            placeholder="name@example.com">
+                        <label for="floatingInput">Apellido paterno</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="apellidoMat" class="form-control" 
+                            placeholder="Password">
+                        <label for="floatingPassword">Apellido materno</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </form>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- Form End -->
+
+{% endblock %}
