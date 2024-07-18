@@ -21,8 +21,8 @@ from bibliogo.views import table, form, user_login, user_logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('table/', table),
+    path('table/', table, name='home'),
     path('form/', form),
-    path('login/', user_login, name='login'),
+    path('', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
 ]
