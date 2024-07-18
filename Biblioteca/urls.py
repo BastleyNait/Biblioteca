@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from bibliogo.views import table, form
+from bibliogo.views import table, form, user_login, user_logout
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('table/', table),
     path('form/', form),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
 ]

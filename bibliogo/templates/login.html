@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {# {% load socialaccount %} #}
+    {# {% providers_media_js %} #}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{% static 'css/log.css' %}">
+    <script src="{% static 'js/log.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+
+    <div class="container">
+        <div class="card center spacer">
+            <h1 class="title text-center">Iniciar Sesión </h1>
+        <!--  
+            <div class="social-login">
+                <div class="social-login">
+                    <form action="{# {% provider_login_url 'google' %} #}" method="post">
+                        {% csrf_token %}
+                        <button class="social-btn" type="submit"><img class="icon" src="{% static 'icons/gmail.svg' %}" alt="gmail icon">INICIAR SESIÓN CON GOOGLE</button>
+                      </form>
+                </div>
+            </div>
+            
+        -->
+            <div class="text-center line form-divider">o</div>
+            <form method="POST" action="{% url 'login' %}" class="login-form spacer">
+                {% csrf_token %}                
+                <div class="input-group">
+                    <img class="icon input-icon" src="{% static 'icons/envelope.png' %}" alt="">
+                    {{form.username}} 
+                </div>
+                <div class="input-group">
+                    <img class="icon input-icon" src="{% static 'icons/key.svg' %}" alt="">
+                    {{form.password}}
+                </div>
+                <input type="submit" class="submit" value="Login">
+            </form>
+
+        </div>
+            {% if error %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ error }}",
+                width: 300,
+                height: 300,
+            });
+        </script>
+            {% endif %}
+    </div>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+ 
+{% load socialaccount %}
+{% providers_media_js %}
+
+
+
+    {% block content %}
+
+    <div class="container-form">
+        <h3>Iniciar sesión</h3>
+        <hr>
+        <div class="login-container">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <p>Tu usuario y contraseña son incorrectos. Por favor, intente nuevamente.</p>
+                </div>
+            {% endif %}
+            <form id="form-login" method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button id="login" class="button-register" type="submit">Iniciar sesión</button>
+            </form>
+            <p>¿No tienes una cuenta? <a href="{% url 'signin' %}">Registrarse</a></p>
+            <span class="or-divider">OR</span>
+
+
+            <div class="social-login">
+
+                <a class="fab fa-google size_social text-info" aria-hidden="true" href="{% provider_login_url 'google' %}"></a>
+            </div>
+        </div>
+    </div>
+{% endblock %} {% endcomment %}
