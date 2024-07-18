@@ -101,14 +101,14 @@ document.addEventListener("DOMContentLoaded", function () {
       contenedorprestamos.innerHTML = '';
 
       data.forEach((prestamo) => {
-        const key = `${prestamo.usuarioPrestado.nombres}-${prestamo.libroPrestado.titulo}`;
+        const key = `${prestamo.alumnoPrestado.nombres}-${prestamo.libroPrestado.titulo}`;
 
         if (!prestamos.has(key)) {
           prestamos.add(key);
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${prestamo.usuarioPrestado.nombres}</td>
+            <td>${prestamo.alumnoPrestado.nombres}</td>
             <td>${prestamo.libroPrestado.titulo}</td>
             <td>${prestamo.fechaPrestamo}</td>
             <td>${prestamo.fechaDevolucion}</td>
