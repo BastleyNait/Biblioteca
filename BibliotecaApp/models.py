@@ -41,7 +41,7 @@ class Reserva(models.Model):
     estado = models.CharField(max_length=20)
     
 class Prestamo(models.Model):
-    usuarioPrestado = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    alumnoPrestado = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     libroPrestado = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fechaPrestamo = models.DateField()
     fechaDevolucion = models.DateField()

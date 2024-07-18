@@ -83,9 +83,9 @@ WSGI_APPLICATION = 'Biblioteca.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Biblioteca',
+        'NAME': 'bibliotecaAPI',
         'USER': 'postgres',
-        'PASSWORD': 'viza1234',
+        'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',
     }

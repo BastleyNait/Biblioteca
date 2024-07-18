@@ -68,7 +68,7 @@ class ReservaCreateSerializer(serializers.Serializer):
         return reserva
 
 class PrestamoSerializer(serializers.ModelSerializer):
-    usuarioPrestado = UsuarioSerializer()  # Nested serializer for Usuario
+    alumnoPrestado = AlumnoSerializer()  # Nested serializer for Usuario
     libroPrestado = LibroSerializer()  # Nested serializer for Libro
     class Meta:
         model = Prestamo
@@ -91,9 +91,9 @@ class PrestamoCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError("Libro no encontrado.")
 
         try:
-            usuario = Usuario.objects.get(dni=dni)
-        except Usuario.DoesNotExist:
-            raise serializers.ValidationError("Usuario no encontrado.")
+            alumno = Alumno.objects.get(dni=dni)
+        except Alumno.DoesNotExist:
+            raise serializers.ValidationError("Alumno no encontrado.")
 
         # Establecer fechas, usar fecha actual y una fecha de devolución por defecto (e.g., 14 días después)
         fecha_prestamo = validated_data.get('fechaPrestamo', date.today())
@@ -102,7 +102,7 @@ class PrestamoCreateSerializer(serializers.Serializer):
         # Crear prestamo
         prestamo = Prestamo.objects.create(
             libroPrestado=libro, 
-            usuarioPrestado=usuario, 
+            alumnoPrestado=alumno, 
             fechaPrestamo=fecha_prestamo, 
             fechaDevolucion=fecha_devolucion,
             estado='pendiente'  # Asigna un estado por defecto
