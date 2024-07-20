@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((data) => {
       const contenedorLibros = document.querySelector("#librosContenedor");
       data.forEach((libro) => {
-        console.log(libro); 
+        console.log(libro);
         libros.push(libro);
         const tr = document.createElement("tr");
         /* tr.classList.add("producto"); */
@@ -199,166 +199,108 @@ document
   });
 
 // FORM ALUMNOS
-document
-  .getElementById("alumnoForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+// API DNI https://apiperu.dev/api/dni/71002707?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4
+document.getElementById("alumnoForm").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-    // Capturar los datos del formulario
-    const identificacion = document.getElementById("identificacion").value;
-    const nombres = document.getElementById("nombres").value;
-    const apellidoPat = document.getElementById("apellidoPat").value;
-    const apellidoMat = document.getElementById("apellidoMat").value;
+  const identificacion = document.getElementById("identificacion").value;
+  const nombres = document.getElementById("nombres").value;
+  const apellidoPat = document.getElementById("apellidoPat").value;
+  const apellidoMat = document.getElementById("apellidoMat").value;
 
-    // Crear el objeto de datos
-    const alumnoData = {
-      dni: identificacion,
-      nombres: nombres,
-      apellidoPat: apellidoPat,
-      apellidoMat: apellidoMat,
-    };
-    console.log(alumnoData.identificacion);
-    console.log(alumnoData.nombres);
-    console.log(alumnoData.apellidoPat);
-    console.log(alumnoData.apellidoMat);
+  const alumnoData = {
+    dni: identificacion,
+    nombres: nombres,
+    apellidoPat: apellidoPat,
+    apellidoMat: apellidoMat,
+  };
 
-    // Realizar el fetch con el método POST
-    fetch("http://127.0.0.1:5000/alumnos/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(alumnoData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 400) {
-            return response.json().then((errorData) => {
-              // Mostrar un mensaje específico para el error 400
-              Swal.fire({
-                icon: "error",
-                title: "Error 400",
-                text: "Solicitud incorrecta: " + JSON.stringify(errorData),
-              });
-              throw new Error("Error 400: " + JSON.stringify(errorData));
-            });
-          } else {
-            // Manejar otros errores
-            return response.json().then((errorData) => {
-              Swal.fire({
-                icon: "error",
-                title: "Error " + response.status,
-                text: "Hubo un problema: " + JSON.stringify(errorData),
-              });
-              throw new Error(
-                "Error " + response.status + ": " + JSON.stringify(errorData)
-              );
-            });
-          }
-        }
-        return response.json(); // Parsear la respuesta si es exitosa
-      })
-      .then((data) => {
+  fetch(`https://apiperu.dev/api/dni/${identificacion}?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success === false) {
+        // La API no encontró ningún registro con ese DNI
         Swal.fire({
-          title: "¡Éxito!",
-          text: "Alumno agregado exitosamente",
-          icon: "success",
+          icon: "warning",
+          title: "DNI no encontrado",
+          text: data.message,
         });
-        // Aquí puedes manejar la respuesta exitosa del servidor
-      })
-      .catch((error) => {
-        // Aquí puedes manejar los errores de la red y otros errores
-        if (!error.message.includes("Error 400")) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Hubo un problema con la solicitud: " + error.message,
+        return;
+      }
+
+      let flag = (
+        data.data.nombres === alumnoData.nombres &&
+        data.data.apellido_paterno === alumnoData.apellidoPat &&
+        data.data.apellido_materno === alumnoData.apellidoMat
+      );
+
+      if (!flag) {
+        fetch("http://127.0.0.1:5000/alumnos/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alumnoData),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              if (response.status === 400) {
+                return response.json().then((errorData) => {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error 400",
+                    text: "Solicitud incorrecta: " + JSON.stringify(errorData),
+                  });
+                  throw new Error("Error 400: " + JSON.stringify(errorData));
+                });
+              } else {
+                return response.json().then((errorData) => {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error " + response.status,
+                    text: "Hubo un problema: " + JSON.stringify(errorData),
+                  });
+                  throw new Error(
+                    "Error " + response.status + ": " + JSON.stringify(errorData)
+                  );
+                });
+              }
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Swal.fire({
+              title: "¡Éxito!",
+              text: "Alumno agregado exitosamente",
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            if (!error.message.includes("Error 400")) {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Hubo un problema con la solicitud: " + error.message,
+              });
+            }
           });
-        }
-      });
-  });
-// FORM LIBROS
-document
-  .getElementById("libroForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
-
-    // Capturar los datos del formulario
-    const ibsn = document.getElementById("ISBN").value;
-    const titulo = document.getElementById("titulo").value;
-    const autor = document.getElementById("autor").value;
-    const categoria = document.getElementById("categoria").value;
-    const cantidad = document.getElementById("cantidad").value;
-   
-    // Crear el objeto de datos
-    const libroData = { 
-      isbn: ibsn,
-      titulo: titulo,
-      autor: autor,
-      categoria: categoria,
-      cantidad: cantidad,
-    }
-    console.log(libroData.ibsn);
-    console.log(libroData.titulo);
-    console.log(libroData.autor);
-    console.log(libroData.categoria);
-    console.log(libroData.cantidad);
-
-    // Realizar el fetch con el método POST
-    fetch("http://127.0.0.1:5000/libros/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(libroData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 400) {
-            return response.json().then((errorData) => {
-              // Mostrar un mensaje específico para el error 400
-              Swal.fire({
-                icon: "error",
-                title: "Error 400",
-                text: "Solicitud incorrecta: " + JSON.stringify(errorData),
-              });
-              throw new Error("Error 400: " + JSON.stringify(errorData));
-            });
-          } else {
-            // Manejar otros errores
-            return response.json().then((errorData) => {
-              Swal.fire({
-                icon: "error",
-                title: "Error " + response.status,
-                text: "Hubo un problema: " + JSON.stringify(errorData),
-              });
-              throw new Error(
-                "Error " + response.status + ": " + JSON.stringify(errorData)
-              );
-            });
-          }
-        }
-        return response.json(); // Parsear la respuesta si es exitosa
-      })
-      .then((data) => {
+      } else {
         Swal.fire({
-          title: "¡Éxito!",
-          text: "Libro agregado exitosamente",
-          icon: "success",
+          icon: "info",
+          title: "Información",
+          text: "Los datos del alumno ya existen en la base de datos.",
         });
-        // Aquí puedes manejar la respuesta exitosa del servidor
-      })
-      .catch((error) => {
-        // Aquí puedes manejar los errores de la red y otros errores
-        if (!error.message.includes("Error 400")) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Hubo un problema con la solicitud: " + error.message,
-          });
-        }
+      }
+    })
+    .catch((error) => {
+      console.error("Error: ", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al consultar la API de DNI: " + error.message,
       });
-  });
+    });
+});
 /* 
 
     const contenedorProductos = document.querySelector("#contenedor-productos");
