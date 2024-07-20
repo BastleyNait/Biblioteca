@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 
 class Usuario(models.Model):
-    dni = models.CharField(max_length=8)
+    dni = models.CharField(max_length=8, primary_key=True, unique=True, null=False)
     nombres = models.CharField(max_length=75)
     apellidoPat = models.CharField(max_length=50)
     apellidoMat = models.CharField(max_length=50)
@@ -20,14 +20,14 @@ class Usuario(models.Model):
         return check_password(password, self.contraseña)
     
 class Alumno(models.Model):
-    dni = models.CharField(max_length=8)
+    dni = models.CharField(max_length=8, primary_key=True, unique=True, null=False)
     nombres = models.CharField(max_length=75)
     apellidoPat = models.CharField(max_length=50)
     apellidoMat = models.CharField(max_length=50)
     estado = models.IntegerField(default=1)
 
 class Libro(models.Model):
-    isbn = models.CharField(max_length=13)
+    isbn = models.CharField(max_length=13, primary_key=True, unique=True, null=False)
     titulo = models.CharField()
     autor = models.CharField(max_length=50)
     categoria = models.CharField(max_length=50)

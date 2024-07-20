@@ -53,7 +53,7 @@ class ReservaCreateSerializer(serializers.Serializer):
         try:
             usuario = Usuario.objects.get(dni=dni)
         except Usuario.DoesNotExist:
-            raise serializers.ValidationError("Usuario no encontrado.")
+            raise serializers.ValidationError("Alumno no encontrado.")
 
         # Establecer fechas, usar fecha actual y una fecha de devolución por defecto (e.g., 14 días después)
         fecha_reserva = validated_data.get('fechaReserva', date.today())
