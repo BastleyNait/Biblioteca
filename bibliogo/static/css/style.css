@@ -120,11 +120,70 @@
     }
 }
 
+body {
+    background-color: rgb(255, 255, 255);
+    font-family: 'Nunito sans', sans-serif;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+}
+
+.card-header {
+    background-color: #5e17eb;
+    color: white;
+}
+
+.title {
+    text-align: center;
+    padding: 10px;
+    color: white;
+}
+
+.logo-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #25d366;
+    color: white;
+    border-color: #25d366;
+}
+
+.btn-primary:hover {
+    background-color: #5e17eb;
+}
+
+.title {
+    font-family:  "Kanit", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color:rgb(0, 0, 0)
+}
+
+.logo-title {
+    font-weight: 600;
+    font-size: 30px;
+    font-style: normal;
+    color:white
+}
+
+.sidebar-custom {
+    background-color: #5e17eb;
+    color: white;
+}
+
+.bg-light {
+    background-color: #ffffff !important;
+}
 
 /*** Navbar ***/
 .sidebar .navbar .navbar-nav .nav-link {
     padding: 7px 20px;
-    color: var(--dark);
+    color: white;
     font-weight: 500;
     border-left: 3px solid var(--light);
     border-radius: 0 30px 30px 0;
@@ -133,7 +192,7 @@
 
 .sidebar .navbar .navbar-nav .nav-link:hover,
 .sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
+    color: #5e17eb;
     background: #FFFFFF;
     border-color: var(--primary);
 }
@@ -144,7 +203,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: #5e17eb;
     border-radius: 40px;
 }
 
@@ -182,7 +241,7 @@
 
 .content .navbar .navbar-nav .nav-link:hover,
 .content .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
+    color: #5e17eb;
 }
 
 .content .navbar .sidebar-toggler,

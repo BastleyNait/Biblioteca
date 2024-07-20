@@ -1,12 +1,12 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout, authenticate
 from .forms import LogInForm
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
-
+@login_required
 def table(request):
     return render(request, 'table.html')
-
+@login_required
 def form(request):
     return render(request, 'form.html')
 
@@ -37,4 +37,4 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')

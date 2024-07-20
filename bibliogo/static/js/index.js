@@ -230,9 +230,9 @@ document.getElementById("alumnoForm").addEventListener("submit", function (event
         return;
       }
       else if (
-        data.data.nombres === alumnoData.nombres &&
-        data.data.apellido_paterno === alumnoData.apellidoPat &&
-        data.data.apellido_materno === alumnoData.apellidoMat
+        data.data.nombres === alumnoData.nombres.toUpperCase().trim() &&
+        data.data.apellido_paterno === alumnoData.apellidoPat.toUpperCase().trim() &&
+        data.data.apellido_materno === alumnoData.apellidoMat.toUpperCase().trim()
       ) {
         fetch("http://127.0.0.1:5000/alumnos/", {
           method: "POST",
