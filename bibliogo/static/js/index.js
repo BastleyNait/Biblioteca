@@ -218,7 +218,9 @@ document.getElementById("alumnoForm").addEventListener("submit", function (event
   fetch(`https://apiperu.dev/api/dni/${identificacion}?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4`)
     .then((response) => response.json())
     .then((data) => {
-      if (data.success === false) {
+      console.log(typeof (data.success))
+      console.log(data.data);
+      if (!data.success) {
         // La API no encontró ningún registro con ese DNI
         Swal.fire({
           icon: "warning",
@@ -227,14 +229,11 @@ document.getElementById("alumnoForm").addEventListener("submit", function (event
         });
         return;
       }
-
-      let flag = (
+      else if (
         data.data.nombres === alumnoData.nombres &&
         data.data.apellido_paterno === alumnoData.apellidoPat &&
         data.data.apellido_materno === alumnoData.apellidoMat
-      );
-
-      if (!flag) {
+      ) {
         fetch("http://127.0.0.1:5000/alumnos/", {
           method: "POST",
           headers: {
@@ -284,13 +283,16 @@ document.getElementById("alumnoForm").addEventListener("submit", function (event
               });
             }
           });
+
+
       } else {
         Swal.fire({
-          icon: "info",
-          title: "Información",
-          text: "Los datos del alumno ya existen en la base de datos.",
+          icon: "warning",
+          title: "Datos incorrectos",
+          text: "Los datos ingresados no coinciden con el DNI",
         });
       }
+
     })
     .catch((error) => {
       console.error("Error: ", error);
