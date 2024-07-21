@@ -12,12 +12,12 @@
                 <form id="prestamoForm">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Codigo Libro</label>
-                        <input class="form-control" id="isbn" name="isbn"
+                        <input class="form-control" required id="isbn" name="isbn"
                             aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">DNI del usuario</label>
-                        <input id="dni" name="dni" class="form-control" >
+                        <input id="id" name="dni" class="form-control" required >
                     </div>
                    
                     <button type="submit" class="btn btn-primary">Aceptar</button>
@@ -32,22 +32,22 @@
                 </h6>
                 <form id="alumnoForm"> 
                     <div class="form-floating mb-3">
-                        <input id="identificacion"  class="form-control" 
+                        <input id="identificacion"  class="form-control" required 
                             placeholder="name@example.com">
                         <label for="floatingInput">DNI</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="nombres" class="form-control" 
+                        <input id="nombres" class="form-control" required 
                             placeholder="Password">
                         <label for="floatingPassword">Nombres</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="apellidoPat" class="form-control" 
+                        <input id="apellidoPat" class="form-control" required 
                             placeholder="name@example.com">
                         <label for="floatingInput">Apellido paterno</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="apellidoMat" class="form-control" 
+                        <input id="apellidoMat" class="form-control" required 
                             placeholder="Password">
                         <label for="floatingPassword">Apellido materno</label>
                     </div>
@@ -63,27 +63,27 @@
                 </h6>
                 <form id="libroForm"> 
                     <div class="form-floating mb-3">
-                        <input id="ISBN"  class="form-control" 
+                        <input id="ISBN"  class="form-control" required 
                             placeholder="Codigo de libro">
                         <label for="ISBN">ISBN</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="titulo" class="form-control" 
+                        <input id="titulo" class="form-control" required 
                             placeholder="Titulo">
                         <label for="titulo">Titulo</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="autor" class="form-control" 
+                        <input id="autor" class="form-control" required 
                             placeholder="Autor">
                         <label for="autor">Autor</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="categoria" class="form-control" 
+                        <input id="categoria" class="form-control" required 
                             placeholder="Categoria">
                         <label for="categoria">Categoria</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input id="cantidad" class="form-control" 
+                        <input id="cantidad" class="form-control" required 
                             placeholder="Cantidad" type="number">
                         <label for="cantidad">Cantidad</label>
                     </div>

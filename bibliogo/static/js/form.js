@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(dni);
 
             // Crear el objeto de datos
-            const prestamoData = {
+            const libroData = {
                 isbn: isbn,
                 dni: dni,
             };
-            console.log(prestamoData.isbn);
-            console.log(prestamoData.dni);
+            console.log(libroData.isbn);
+            console.log(libroData.dni);
 
             // Realizar el fetch con el método POST
             fetch("http://127.0.0.1:5000/prestamos/", {
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(prestamoData),
+                body: JSON.stringify(libroData),
             })
                 .then((response) => {
                     if (!response.ok) {
@@ -183,5 +183,86 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 });
         });
+
+        // FORM LIBROS
+        document
+        .getElementById("libroForm")
+        .addEventListener("submit", function (event) {
+            event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+
+            // Capturar los datos del formulario
+            const isbn = document.getElementById("isbn").value;
+            const titulo = document.getElementById("titulo").value;
+            const autor = document.getElementById("autor").value;
+            const categoria = document.getElementById("categoria").value;
+            const cantidad = document.getElementById("cantidad").value;
+
+
+            // Crear el objeto de datos
+            const libroData = {
+                isbn: isbn,
+                titulo: titulo,
+                autor: autor,
+                categoria: categoria,
+                cantidad: cantidad
+            };
+            console.log(libroData.isbn);
+
+            // Realizar el fetch con el método POST
+            fetch("http://127.0.0.1:5000/libros/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(libroData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 400) {
+                            return response.json().then((errorData) => {
+                                // Mostrar un mensaje específico para el error 400
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error 400",
+                                    text: "Solicitud incorrecta: " + JSON.stringify(errorData),
+                                });
+                                throw new Error("Error 400: " + JSON.stringify(errorData));
+                            });
+                        } else {
+                            // Manejar otros errores
+                            return response.json().then((errorData) => {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error " + response.status,
+                                    text: "Hubo un problema: " + JSON.stringify(errorData),
+                                });
+                                throw new Error(
+                                    "Error " + response.status + ": " + JSON.stringify(errorData)
+                                );
+                            });
+                        }
+                    }
+                    return response.json(); // Parsear la respuesta si es exitosa
+                })
+                .then((data) => {
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: "Libro prestado exitosamente",
+                        icon: "success",
+                    });
+                    // Aquí puedes manejar la respuesta exitosa del servidor
+                })
+                .catch((error) => {
+                    // Aquí puedes manejar los errores de la red y otros errores
+                    if (!error.message.includes("Error 400")) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Hubo un problema con la solicitud: " + error.message,
+                        });
+                    }
+                });
+        });
+
 });
 
