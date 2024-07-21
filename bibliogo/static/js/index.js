@@ -29,7 +29,53 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => console.error("Error fetching products:", error));
 });
 
-//  TABLA ALUMNOS
+
+// BUSQUEDA DE LIBROS ######################################################################
+
+// Obtener referencias a los elementos del DOM
+const searchInput = document.getElementById('librosInput');
+const librosContenedor = document.getElementById('librosContenedor');
+
+// Suponiendo que tienes un array de libros con esta estructura
+
+// Función para mostrar todos los libros
+function mostrarLibros(librosf) {
+  librosContenedor.innerHTML = '';
+  librosf.forEach(libro => {
+    const row = `
+      <tr>
+        <td>${libro.isbn}</td>
+        <td>${libro.titulo}</td>
+        <td>${libro.autor}</td>
+        <td>${libro.categoria}</td>
+        <td>${libro.cantidad}</td>
+      </tr>
+    `;
+    librosContenedor.innerHTML += row;
+  });
+}
+
+// Función para filtrar libros
+function filtrarLibros(busqueda) {
+  return libros.filter(libro =>
+    libro.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+    libro.autor.toLowerCase().includes(busqueda.toLowerCase()) ||
+    libro.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
+    libro.isbn.toLowerCase().includes(busqueda.toLowerCase())
+  );
+}
+
+// Escuchar el evento 'keyup' en el campo de búsqueda
+searchInput.addEventListener('keyup', function () {
+  const busqueda = this.value;
+  const librosFiltrados = filtrarLibros(busqueda);
+  mostrarLibros(librosFiltrados);
+});
+
+// Mostrar todos los libros al cargar la página
+mostrarLibros(libros);
+
+//  TABLA ALUMNOSd ######################################################################
 const alumnos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
   fetch("http://127.0.0.1:5000/alumnos/")
@@ -64,32 +110,51 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => console.error("Error fetching products:", error));
 });
 
-/* const alumnos = [];
-document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://127.0.0.1:5000/alumnos/")
-    .then((response) => response.json())
-    .then((data) => {
-      const contenedoralumnos = document.querySelector("#alumnosContenedor");
-      data.forEach((alumno) => {
-        alumnos.push(alumno);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-                        <tr>
-                          <td>${alumno.dni}</td>
-                          <td>${alumno.nombres}</td>
-                          <td>${alumno.apellidoPat}</td>
-                          <td>${alumno.apellidoMat}</td>
-                        </tr>
-                    `;
-        contenedoralumnos.append(tr);
-      });
-      cargarProductos(data);
-      actualizarBotonesAgregar();
-      cargarProductos(data);
-    })
-    .catch((error) => console.error("Error fetching products:", error));
+
+// BUSQUEDA DE ALUMNOS ######################################################################
+
+// Obtener referencias a los elementos del DOM
+const searchInputAlumnos = document.getElementById('alumnoInput');
+const alumnosContenedor = document.getElementById('alumnosContenedor');
+
+
+// Función para mostrar todos los alumnos
+function mostrarAlumnos(alumnosf) {
+  alumnosContenedor.innerHTML = '';
+  alumnosf.forEach(alumno => {
+    const rowAl = `
+      <tr>
+        <td>${alumno.dni}</td>
+        <td>${alumno.nombres}</td>k
+        <td>${alumno.apellidoPat}</td>
+        <td>${alumno.apellidoMat}</td>
+      </tr>
+    `;
+    alumnosContenedor.innerHTML += rowAl;
+  });
+}
+
+// Función para filtrar libros
+function filtrarAlumnos(busqueda) {
+  return alumnos.filter(alumno =>
+    alumno.dni.toLowerCase().includes(busqueda.toLowerCase()) ||
+    alumno.nombres.toLowerCase().includes(busqueda.toLowerCase()) ||
+    alumno.apellidoPat.toLowerCase().includes(busqueda.toLowerCase()) ||
+    alumno.apellidoMat.toLowerCase().includes(busqueda.toLowerCase())
+  );
+}
+
+// Escuchar el evento 'keyup' en el campo de búsqueda
+searchInputAlumnos.addEventListener('keyup', function () {
+  const busqueda = this.value;
+  const alumnosFiltrados = filtrarAlumnos(busqueda);
+  mostrarAlumnos(alumnosFiltrados);
 });
- */
+
+// Mostrar todos los libros al cargar la páginA
+
+
+// TABLA PRESTAMOS ######################################################################
 const prestamos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
   fetch("http://127.0.0.1:5000/prestamos/")
@@ -124,271 +189,45 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => console.error("Error fetching products:", error));
 });
 
-// FORMULARIO DE PRESTAMO
-document
-  .getElementById("prestamoForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+// BUSQUEDA DE PRESTAMOS ######################################################################
 
-    // Capturar los datos del formulario
-    const isbn = document.getElementById("isbn").value;
-    const dni = document.getElementById("dni").value;
+// Obtener referencias a los elementos del DOM
+const searchInputPrestamos = document.getElementById('prestamoInput');
+const prestamosContenedor = document.getElementById('prestamosContenedor');
 
-    // Crear el objeto de datos
-    const prestamoData = {
-      isbn: isbn,
-      dni: dni,
-    };
-    console.log(prestamoData.isbn);
-    console.log(prestamoData.dni);
 
-    // Realizar el fetch con el método POST
-    fetch("http://127.0.0.1:5000/prestamos/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(prestamoData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 400) {
-            return response.json().then((errorData) => {
-              // Mostrar un mensaje específico para el error 400
-              Swal.fire({
-                icon: "error",
-                title: "Error 400",
-                text: "Solicitud incorrecta: " + JSON.stringify(errorData),
-              });
-              throw new Error("Error 400: " + JSON.stringify(errorData));
-            });
-          } else {
-            // Manejar otros errores
-            return response.json().then((errorData) => {
-              Swal.fire({
-                icon: "error",
-                title: "Error " + response.status,
-                text: "Hubo un problema: " + JSON.stringify(errorData),
-              });
-              throw new Error(
-                "Error " + response.status + ": " + JSON.stringify(errorData)
-              );
-            });
-          }
-        }
-        return response.json(); // Parsear la respuesta si es exitosa
-      })
-      .then((data) => {
-        Swal.fire({
-          title: "¡Éxito!",
-          text: "Libro prestado exitosamente",
-          icon: "success",
-        });
-        // Aquí puedes manejar la respuesta exitosa del servidor
-      })
-      .catch((error) => {
-        // Aquí puedes manejar los errores de la red y otros errores
-        if (!error.message.includes("Error 400")) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Hubo un problema con la solicitud: " + error.message,
-          });
-        }
-      });
+// Función para mostrar todos los alumnos
+function mostrarPrestamos(prestamosf) {
+  prestamosContenedor.innerHTML = '';
+  prestamosf.forEach(prestamo => {
+    const rowPr = `
+      <tr>
+        <td>${prestamo.alumnoPrestado.nombres}</td>
+        <td>${prestamo.libroPrestado.titulo}</td>
+        <td>${prestamo.fechaPrestamo}</td>
+        <td>${prestamo.fechaDevolucion}</td>
+      </tr>
+    `;
+    prestamosContenedor.innerHTML += rowPr;
   });
+}
 
-// FORM ALUMNOS
-// API DNI https://apiperu.dev/api/dni/71002707?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4
-document.getElementById("alumnoForm").addEventListener("submit", function (event) {
-  event.preventDefault();
+// Función para filtrar libros
+function filtrarPrestamos(busqueda) {
+  return prestamos.filter(prestamo =>
+    prestamo.alumnoPrestado.nombres.toLowerCase().includes(busqueda.toLowerCase()) ||
+    prestamo.libroPrestado.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+    prestamo.fechaPrestamo.toLowerCase().includes(busqueda.toLowerCase()) ||
+    prestamo.fechaDevolucion.toLowerCase().includes(busqueda.toLowerCase())
+  );
+}
 
-  const identificacion = document.getElementById("identificacion").value;
-  const nombres = document.getElementById("nombres").value;
-  const apellidoPat = document.getElementById("apellidoPat").value;
-  const apellidoMat = document.getElementById("apellidoMat").value;
-
-  const alumnoData = {
-    dni: identificacion,
-    nombres: nombres,
-    apellidoPat: apellidoPat,
-    apellidoMat: apellidoMat,
-  };
-
-  fetch(`https://apiperu.dev/api/dni/${identificacion}?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(typeof (data.success))
-      console.log(data.data);
-      if (!data.success) {
-        // La API no encontró ningún registro con ese DNI
-        Swal.fire({
-          icon: "warning",
-          title: "DNI no encontrado",
-          text: data.message,
-        });
-        return;
-      }
-      else if (
-        data.data.nombres === alumnoData.nombres.toUpperCase().trim() &&
-        data.data.apellido_paterno === alumnoData.apellidoPat.toUpperCase().trim() &&
-        data.data.apellido_materno === alumnoData.apellidoMat.toUpperCase().trim()
-      ) {
-        fetch("http://127.0.0.1:5000/alumnos/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(alumnoData),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              if (response.status === 400) {
-                return response.json().then((errorData) => {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error 400",
-                    text: "Solicitud incorrecta: " + JSON.stringify(errorData),
-                  });
-                  throw new Error("Error 400: " + JSON.stringify(errorData));
-                });
-              } else {
-                return response.json().then((errorData) => {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error " + response.status,
-                    text: "Hubo un problema: " + JSON.stringify(errorData),
-                  });
-                  throw new Error(
-                    "Error " + response.status + ": " + JSON.stringify(errorData)
-                  );
-                });
-              }
-            }
-            return response.json();
-          })
-          .then((data) => {
-            Swal.fire({
-              title: "¡Éxito!",
-              text: "Alumno agregado exitosamente",
-              icon: "success",
-            });
-          })
-          .catch((error) => {
-            if (!error.message.includes("Error 400")) {
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Hubo un problema con la solicitud: " + error.message,
-              });
-            }
-          });
-
-
-      } else {
-        Swal.fire({
-          icon: "warning",
-          title: "Datos incorrectos",
-          text: "Los datos ingresados no coinciden con el DNI",
-        });
-      }
-
-    })
-    .catch((error) => {
-      console.error("Error: ", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema al consultar la API de DNI: " + error.message,
-      });
-    });
+// Escuchar el evento 'keyup' en el campo de búsqueda
+searchInputPrestamos.addEventListener('keyup', function () {
+  const busqueda = this.value;
+  const prestamosFiltrados = filtrarPrestamos(busqueda);
+  mostrarPrestamos(prestamosFiltrados);
 });
-/* 
 
-    const contenedorProductos = document.querySelector("#contenedor-productos");
-    const botonesCategorias = document.querySelectorAll(".boton-categoria");
-    const tituloPrincipal = document.querySelector("#titulo-principal");
-    let botonesAgregar = document.querySelectorAll(".producto-agregar");
-    const numerito = document.querySelector("#numerito");
+// Mostrar todos los libros al cargar la páginA
 
-    function cargarProductos(productosElegidos) {
-
-        contenedorProductos.innerHTML = "";
-
-        productosElegidos.forEach(producto => {
-
-            const div = document.createElement("div");
-            div.classList.add("producto");
-            div.innerHTML = `
-                 <img class="producto-imagen" src="${producto.image_url}" alt="${producto.name}">
-                 <div class="producto-detalles">
-                     <h3 class="producto-titulo">${producto.name}</h3>
-                     <p class="producto-precio">S/ ${producto.price}</p>
-                     <button class="producto-agregar" id="${producto.name}">Agregar</button>
-                 </div>
-             `;
-            contenedorProductos.append(div);
-        })
-        actualizarBotonesAgregar();
-    }
-
-
-
-    botonesCategorias.forEach(boton => {
-        boton.addEventListener("click", (e) => {
-            console.log(productos)
-            botonesCategorias.forEach(boton => boton.classList.remove("active"));
-            e.currentTarget.classList.add("active");
-            if (e.currentTarget.id != "todos") {
-                const productoCategoria = productos.find(producto => producto.category === e.currentTarget.id);
-                tituloPrincipal.innerText = productoCategoria.category;
-                const productosBoton = productos.filter(producto => producto.category === e.currentTarget.id);
-                cargarProductos(productosBoton);
-            } else {
-                tituloPrincipal.innerText = "Todos los productos";
-                cargarProductos(productos);
-            }
-        })
-    });
-
-    function actualizarBotonesAgregar() {
-        botonesAgregar = document.querySelectorAll(".producto-agregar");
-        botonesAgregar.forEach(boton => {
-            boton.addEventListener("click", agregarAlCarrito);
-        });
-    }
-
-    let productosEnCarrito;
-
-    let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
-
-    if (productosEnCarritoLS) {
-        productosEnCarrito = JSON.parse(productosEnCarritoLS);
-        actualizarNumerito();
-    } else {
-        productosEnCarrito = [];
-    }
-
-    function agregarAlCarrito(e) {
-        const idBoton = e.currentTarget.id;
-        const productoAgregado = productos.find(producto => producto.name === idBoton);
-
-        if (productosEnCarrito.some(producto => producto.name === idBoton)) {
-            const index = productosEnCarrito.findIndex(producto => producto.name === idBoton);
-            productosEnCarrito[index].stock++;
-        } else {
-            productoAgregado.stock = 1;
-            productosEnCarrito.push(productoAgregado);
-        }
-
-        actualizarNumerito();
-
-        localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
-    }
-
-    function actualizarNumerito() {
-        let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.stock, 0);
-        numerito.innerText = nuevoNumerito;
-    }
-});
- */
