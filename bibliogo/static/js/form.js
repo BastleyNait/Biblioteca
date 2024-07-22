@@ -1,4 +1,61 @@
 
+
+function initializePrestamosForm() {
+    // Inicializar Select2 para el campo de libros
+    $('#isbn').select2({
+        placeholder: 'Buscar libro por ISBN o título',
+        ajax: {
+            url: 'https://bibliotecabackend-1.onrender.com/libros',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(function (libro) {
+                        return {
+                            id: libro.isbn,
+                            text: `${libro.isbn} - ${libro.titulo}`
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2
+    });
+
+    // Inicializar Select2 para el campo de usuarios
+    $('#id').select2({
+        placeholder: 'Buscar usuario por DNI o nombre',
+        ajax: {
+            url: 'https://bibliotecabackend-1.onrender.com/alumnos',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(function (alumno) {
+                        return {
+                            id: alumno.dni,
+                            text: `${alumno.dni} - ${alumno.nombres} ${alumno.apellidoPat}`
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2
+    });
+
+    
+   
+}
+
+// Llama a esta función cuando el DOM esté listo
+$(document).ready(function () {
+    initializePrestamosForm();
+});
+// Inicializar el formulario de devolución
+
+
 document.addEventListener("DOMContentLoaded", function () {
     // FORMULARIO DE PRESTAMO
     document
@@ -7,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
 
             // Capturar los datos del formulario
-            const isbn = document.getElementById("isbn").value;
-            const dni = document.getElementById("dni").value;
+            const isbn =$('#isbn').val();
+            const dni =$('#id').val();
             console.log(isbn);
             console.log(dni);
 
@@ -21,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(libroData.dni);
 
             // Realizar el fetch con el método POST
-            fetch("http://127.0.0.1:5000/prestamos/", {
+            fetch("https://bibliotecabackend-1.onrender.com/prestamos/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -76,6 +133,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
 
+
+
+
+
     // FORM ALUMNOS
     // API DNI https://apiperu.dev/api/dni/71002707?api_token=de5ca7555c68b88604aaf9ddc0245c9ea44f7a087f1e79b29b1579d42ec1d6b4
     document
@@ -114,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         data.data.apellido_paterno === alumnoData.apellidoPat.toUpperCase().trim() &&
                         data.data.apellido_materno === alumnoData.apellidoMat.toUpperCase().trim()
                     ) {
-                        fetch("http://127.0.0.1:5000/alumnos/", {
+                        fetch("https://bibliotecabackend-1.onrender.com/alumnos/", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -184,8 +245,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
 
-        // FORM LIBROS
-        document
+    // FORM LIBROS
+    document
         .getElementById("libroForm")
         .addEventListener("submit", function (event) {
             event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
@@ -209,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(libroData.isbn);
 
             // Realizar el fetch con el método POST
-            fetch("http://127.0.0.1:5000/libros/", {
+            fetch("https://bibliotecabackend-1.onrender.com/libros/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
