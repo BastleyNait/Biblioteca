@@ -1,5 +1,5 @@
 
-
+const fetchSource = "https://bibliotecabackend-1.onrender.com";
 function initializePrestamosForm() {
     // Inicializar Select2 para el campo de libros
     $('#isbn').select2({
@@ -7,7 +7,7 @@ function initializePrestamosForm() {
         ajax: {
             url: 'https://bibliotecabackend-1.onrender.com/libros',
             dataType: 'json',
-            delay: 250,
+            delay: 0,
             processResults: function (data) {
                 return {
                     results: data.map(function (libro) {
@@ -20,9 +20,7 @@ function initializePrestamosForm() {
             },
             cache: true
         },
-        minimumInputLength: 2
     });
-
     // Inicializar Select2 para el campo de usuarios
     $('#id').select2({
         placeholder: 'Buscar usuario por DNI o nombre',
@@ -42,7 +40,6 @@ function initializePrestamosForm() {
             },
             cache: true
         },
-        minimumInputLength: 2
     });
 
     

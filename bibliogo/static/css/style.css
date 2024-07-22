@@ -27,7 +27,9 @@
     visibility: visible;
     opacity: 1;
 }
-
+th,td {
+    text-align: center;    
+}
 
 /*** Button ***/
 .btn {
