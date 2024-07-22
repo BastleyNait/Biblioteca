@@ -278,11 +278,17 @@ function mostrarLibros(librosf) {
         <td>${libro.autor}</td>
         <td>${libro.categoria}</td>
         <td>${libro.cantidad}</td>
+                    <td>
+              <button class="btn btn-primary modificar-btn" data-isbn="${libro.isbn}">Modificar</button>
+              <button class="btn btn-danger eliminar-btn" data-isbn="${libro.isbn}">Eliminar</button>
+            </td>
       </tr>
     `;
     librosContenedor.innerHTML += row;
   });
 }
+asignarEventosEliminarLibro();
+asignarEventosModificarLibro();
 
 // Función para filtrar libros
 function filtrarLibros(busqueda) {
@@ -591,11 +597,17 @@ function mostrarAlumnos(alumnosf) {
         <td>${alumno.nombres}</td>
         <td>${alumno.apellidoPat}</td>
         <td>${alumno.apellidoMat}</td>
+                  <td>
+            <button class="btn btn-primary modificar-btn" data-dni="${alumno.dni}">Modificar</button>
+            <button class="btn btn-danger eliminar-btn" data-dni="${alumno.dni}">Eliminar</button>
+          </td>
       </tr>
     `;
     alumnosContenedor.innerHTML += rowAl;
   });
 }
+asignarEventosEliminar();
+asignarEventosModificar();
 
 // Función para filtrar libros
 function filtrarAlumnos(busqueda) {
@@ -892,11 +904,17 @@ function mostrarPrestamos(prestamosf) {
         <td>${prestamo.libroPrestado.titulo}</td>
         <td>${prestamo.fechaPrestamo}</td>
         <td>${prestamo.fechaDevolucion}</td>
+        <td>
+              <button class="btn btn-primary modificar-btn" data="${id}">Modificar</button>
+              <button class="btn btn-danger eliminar-btn" data="${id}">Eliminar</button>
+        </td>
       </tr>
     `;
     prestamosContenedor.innerHTML += rowPr;
   });
 }
+asignarEventosEliminarPrestamos();
+asignarEventosModificarPrestamos();
 
 // Función para filtrar libros
 function filtrarPrestamos(busqueda) {
