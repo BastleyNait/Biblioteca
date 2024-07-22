@@ -2,7 +2,9 @@
 
 const libros = [];
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("https://bibliotecabackend-1.onrender.com/libros/")
+  const fetchSource = "https://bibliotecabackend-1.onrender.com";
+
+  fetch(`${fetchSource}/libros/`)
     .then((response) => response.json())
     .then((data) => {
       const contenedorLibros = document.querySelector("#librosContenedor");
@@ -28,15 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
         contenedorLibros.append(tr);
       });
 
-
-      
       asignarEventosModificarLibro();
-
       asignarEventosEliminarLibro();
-
-
       actualizarBotonesAgregar();
-      cargarProductos(data);
+
     })
     .catch((error) => console.error("Error fetching products:", error));
 });
@@ -55,7 +52,7 @@ function asignarEventosEliminarLibro() {
 // Función para eliminar un libro por su ISBN
 function eliminarLibro(isbn) {
   // Enviar solicitud DELETE al API
-  fetch(`https://bibliotecabackend-1.onrender.com/libros/${isbn}`, {
+  fetch(`${fetchSource}/libros/${isbn}`, {
     method: 'DELETE',
   })
     .then((response) => {
@@ -65,6 +62,7 @@ function eliminarLibro(isbn) {
           .find(row => row.querySelector("td").textContent === isbn);
         if (filaAEliminar) {
           filaAEliminar.remove();
+          mostrarLibros(libros);
         }
 
         // Mostrar mensaje de éxito
@@ -201,7 +199,7 @@ function mostrarPanelModificarLibro(isbn) {
 
 // Función para modificar un libro por su ISBN
 function modificarLibro(libro) {
-  fetch(`https://bibliotecabackend-1.onrender.com/libros/${libro.isbn}`, {
+  fetch(`${fetchSource}/libros/${libro.isbn}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -265,30 +263,48 @@ const searchInput = document.getElementById('librosInput');
 const librosContenedor = document.getElementById('librosContenedor');
 document.addEventListener("DOMContentLoaded", function () {
 
-// Suponiendo que tienes un array de libros con esta estructura
+  // Suponiendo que tienes un array de libros con esta estructura
 
-// Función para mostrar todos los libros
-function mostrarLibros(librosf) {
-  librosContenedor.innerHTML = '';
-  librosf.forEach(libro => {
-    const row = `
+  // Función para mostrar todos los libros
+  function mostrarLibros(librosf) {
+    librosContenedor.innerHTML = '';
+    librosf.forEach(libro => {
+      const row = `
       <tr>
         <td>${libro.isbn}</td>
         <td>${libro.titulo}</td>
         <td>${libro.autor}</td>
         <td>${libro.categoria}</td>
         <td>${libro.cantidad}</td>
-                    <td>
+        <td>
               <button class="btn btn-primary modificar-btn" data-isbn="${libro.isbn}">Modificar</button>
               <button class="btn btn-danger eliminar-btn" data-isbn="${libro.isbn}">Eliminar</button>
-            </td>
+        </td>
       </tr>
     `;
-    librosContenedor.innerHTML += row;
+      librosContenedor.innerHTML += row;
+    });
+  }
+  asignarEventosEliminarLibro();
+  asignarEventosModificarLibro();
+  // Función para filtrar libros
+  function filtrarLibros(busqueda) {
+    return libros.filter(libro =>
+      libro.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+      libro.autor.toLowerCase().includes(busqueda.toLowerCase()) ||
+      libro.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
+      libro.isbn.toLowerCase().includes(busqueda.toLowerCase())
+    );
+  }
+
+  // Escuchar el evento 'keyup' en el campo de búsqueda
+  searchInput.addEventListener('keyup', function () {
+    const busqueda = this.value;
+    const librosFiltrados = filtrarLibros(busqueda);
+    mostrarLibros(librosFiltrados);
   });
-}
-asignarEventosEliminarLibro();
-asignarEventosModificarLibro();
+});
+
 
 // Función para filtrar libros
 function filtrarLibros(busqueda) {
@@ -298,21 +314,17 @@ function filtrarLibros(busqueda) {
     libro.categoria.toLowerCase().includes(busqueda.toLowerCase()) ||
     libro.isbn.toLowerCase().includes(busqueda.toLowerCase())
   );
-}
+};
 
-// Escuchar el evento 'keyup' en el campo de búsqueda
-searchInput.addEventListener('keyup', function () {
-  const busqueda = this.value;
-  const librosFiltrados = filtrarLibros(busqueda);
-  mostrarLibros(librosFiltrados);
-});
-});
+
+
+
 // Mostrar todos los libros al cargar la página
 
 //  TABLA ALUMNOS ######################################################################
-const alumnos  = new Set();
+const alumnos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("https://bibliotecabackend-1.onrender.com/alumnos/")
+  fetch(`${fetchSource}/alumnos/`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -345,8 +357,6 @@ document.addEventListener("DOMContentLoaded", function () {
       asignarEventosModificar();
 
       asignarEventosEliminar();
-      // Asumiendo que cargarProductos y actualizarBotonesAgregar son necesarias después de agregar los elementos
-      cargarProductos(data);
       actualizarBotonesAgregar();
     })
     .catch((error) => console.error("Error fetching products:", error));
@@ -367,7 +377,7 @@ function asignarEventosEliminar() {
 // Función para eliminar un alumno por su dni
 function eliminarAlumno(dni) {
   // Enviar solicitud DELETE al API
-  fetch(`https://bibliotecabackend-1.onrender.com/alumnos/${dni}`, {
+  fetch(`${fetchSource}/alumnos/${dni}`, {
     method: 'DELETE',
   })
     .then((response) => {
@@ -520,7 +530,7 @@ function mostrarPanelModificar(dni) {
 
 // Función para modificar un alumno por su dni
 function modificarAlumno(alumno) {
-  fetch(`https://bibliotecabackend-1.onrender.com/alumnos/${alumno.dni}`, {
+  fetch(`${fetchSource}/alumnos/${alumno.dni}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -597,10 +607,10 @@ function mostrarAlumnos(alumnosf) {
         <td>${alumno.nombres}</td>
         <td>${alumno.apellidoPat}</td>
         <td>${alumno.apellidoMat}</td>
-                  <td>
+        <td>
             <button class="btn btn-primary modificar-btn" data-dni="${alumno.dni}">Modificar</button>
             <button class="btn btn-danger eliminar-btn" data-dni="${alumno.dni}">Eliminar</button>
-          </td>
+        </td>
       </tr>
     `;
     alumnosContenedor.innerHTML += rowAl;
@@ -636,12 +646,12 @@ mostrarAlumnos(Array.from(alumnos));
 
 const prestamos = new Set();
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("https://bibliotecabackend-1.onrender.com/prestamos/")
+  fetch(`${fetchSource}/prestamos/`)
     .then((response) => response.json())
     .then((data) => {
       const contenedorprestamos = document.querySelector("#prestamosContenedor");
-      console.log(data+"prestamos");
-      
+      console.log(data + "prestamos");
+
       // Limpiar el contenido del contenedor antes de agregar nuevos elementos
       contenedorprestamos.innerHTML = '';
 
@@ -693,7 +703,7 @@ function asignarEventosEliminarPrestamos() {
 // Función para eliminar un préstamo por su ID
 function eliminarPrestamo(id) {
   // Enviar solicitud DELETE al API
-  fetch(`https://bibliotecabackend-1.onrender.com/prestamos/${id}`, {
+  fetch(`${fetchSource}/prestamos/${id}`, {
     method: 'DELETE',
   })
     .then((response) => {
@@ -730,32 +740,32 @@ function eliminarPrestamo(id) {
 }
 
 // MODIFICAR PRÉSTAMOS ######################################################################
-
-function asignarEventosModificarPrestamos() {
-  const botonesModificar = document.querySelectorAll("#PrestamosModificar");
-  botonesModificar.forEach((boton) => {
-    boton.addEventListener("click", function () {
-      const id = this.getAttribute("data");
-      mostrarPanelModificarPrestamo(id);
+document.addEventListener("DOMContentLoaded", function () {
+  function asignarEventosModificarPrestamos() {
+    const botonesModificar = document.querySelectorAll("#PrestamosModificar");
+    botonesModificar.forEach((boton) => {
+      boton.addEventListener("click", function () {
+        const id = this.getAttribute("data");
+        mostrarPanelModificarPrestamo(id);
+      });
     });
-  });
-}
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    // Función para mostrar el panel de modificación de préstamo
+    function mostrarPanelModificarPrestamo(id) {
+      // Obtener el préstamo del Set
+      const prestamo = Array.from(prestamos).find(p => `${p.alumnoPrestado.nombres}-${p.libroPrestado.titulo}` === id);
+      if (!prestamo) return;
 
-// Función para mostrar el panel de modificación de préstamo
-function mostrarPanelModificarPrestamo(id) {
-  // Obtener el préstamo del Set
-  const prestamo = Array.from(prestamos).find(p => `${p.alumnoPrestado.nombres}-${p.libroPrestado.titulo}` === id);
-  if (!prestamo) return;
+      const panelModificar = document.querySelector("#panelModificar");
 
-  const panelModificar = document.querySelector("#panelModificar");
+      panelModificar.className = 'modal fade';
+      panelModificar.setAttribute('tabindex', '-1');
+      panelModificar.setAttribute('role', 'dialog');
+      panelModificar.setAttribute('aria-labelledby', 'modificarPrestamoModalLabel');
+      panelModificar.setAttribute('aria-hidden', 'true');
 
-  panelModificar.className = 'modal fade';
-  panelModificar.setAttribute('tabindex', '-1');
-  panelModificar.setAttribute('role', 'dialog');
-  panelModificar.setAttribute('aria-labelledby', 'modificarPrestamoModalLabel');
-  panelModificar.setAttribute('aria-hidden', 'true');
-
-  panelModificar.innerHTML = `
+      panelModificar.innerHTML = `
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -789,68 +799,69 @@ function mostrarPanelModificarPrestamo(id) {
     </div>
   `;
 
-  // Mostrar el modal
-  $('#panelModificar').modal('show');
+      // Mostrar el modal
+      $('#panelModificar').modal('show');
 
-  // Función para cerrar el modal y limpiar
-  function cerrarYLimpiarModal() {
-    $('#panelModificar').modal('hide');
-    $('#panelModificar').on('hidden.bs.modal', function (e) {
-      // No es necesario remover el panel, ya que lo estamos reutilizando
-    });
-  }
+      // Función para cerrar el modal y limpiar
+      function cerrarYLimpiarModal() {
+        $('#panelModificar').modal('hide');
+        $('#panelModificar').on('hidden.bs.modal', function (e) {
+          // No es necesario remover el panel, ya que lo estamos reutilizando
+        });
+      }
 
-  // Asignar eventos al botón de enviar
-  document.getElementById("enviarModificarPrestamo").addEventListener("click", function () {
-    const updatedPrestamo = {
-      ...prestamo,
-      fechaPrestamo: document.getElementById("fechaPrestamo").value,
-      fechaDevolucion: document.getElementById("fechaDevolucion").value
-    };
-    modificarPrestamo(updatedPrestamo);
-    cerrarYLimpiarModal();
-  });
+      // Asignar eventos al botón de enviar
+      document.getElementById("enviarModificarPrestamo").addEventListener("click", function () {
+        const updatedPrestamo = {
+          ...prestamo,
+          fechaPrestamo: document.getElementById("fechaPrestamo").value,
+          fechaDevolucion: document.getElementById("fechaDevolucion").value
+        };
+        modificarPrestamo(updatedPrestamo);
+        cerrarYLimpiarModal();
+      });
 
-  // Asignar evento al botón de cancelar
-  $('#cancelarModificarPrestamo').on('click', function (e) {
-    cerrarYLimpiarModal();
-  });
+      // Asignar evento al botón de cancelar
+      $('#cancelarModificarPrestamo').on('click', function (e) {
+        cerrarYLimpiarModal();
+      });
 
-  // Cerrar modal al hacer clic fuera de él
-  $('#panelModificar').on('click', function (e) {
-    if (e.target !== this) return;
-    cerrarYLimpiarModal();
-  });
+      // Cerrar modal al hacer clic fuera de él
+      $('#panelModificar').on('click', function (e) {
+        if (e.target !== this) return;
+        cerrarYLimpiarModal();
+      });
 
-  // Manejar el cierre del modal con la tecla Esc
-  $(document).on('keydown', function (e) {
-    if (e.key === "Escape") {
-      cerrarYLimpiarModal();
+      // Manejar el cierre del modal con la tecla Esc
+      $(document).on('keydown', function (e) {
+        if (e.key === "Escape") {
+          cerrarYLimpiarModal();
+        }
+      });
     }
-  });
-}
 
-// Función para modificar un préstamo
-function modificarPrestamo(prestamo) {
-  const id = `${prestamo.alumnoPrestado.nombres}-${prestamo.libroPrestado.titulo}`;
-  fetch(`https://bibliotecabackend-1.onrender.com/prestamos/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(prestamo)
-  })
-    .then((response) => {
-      if (response.ok) {
-        // Actualizar en el Set
-        prestamos.delete(Array.from(prestamos).find(p => `${p.alumnoPrestado.nombres}-${p.libroPrestado.titulo}` === id));
-        prestamos.add(prestamo);
 
-        // Actualizar la tabla
-        const filaAModificar = Array.from(document.querySelectorAll("#prestamosContenedor tr"))
-          .find(row => row.querySelector("button").getAttribute("data") === id);
-        if (filaAModificar) {
-          filaAModificar.innerHTML = `
+    // Función para modificar un préstamo
+    function modificarPrestamo(prestamo) {
+      const id = `${prestamo.alumnoPrestado.nombres}-${prestamo.libroPrestado.titulo}`;
+      fetch(`${fetchSource}/prestamos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(prestamo)
+      })
+        .then((response) => {
+          if (response.ok) {
+            // Actualizar en el Set
+            prestamos.delete(Array.from(prestamos).find(p => `${p.alumnoPrestado.nombres}-${p.libroPrestado.titulo}` === id));
+            prestamos.add(prestamo);
+
+            // Actualizar la tabla
+            const filaAModificar = Array.from(document.querySelectorAll("#prestamosContenedor tr"))
+              .find(row => row.querySelector("button").getAttribute("data") === id);
+            if (filaAModificar) {
+              filaAModificar.innerHTML = `
             <td>${prestamo.alumnoPrestado.nombres}</td>
             <td>${prestamo.libroPrestado.titulo}</td>
             <td>${prestamo.fechaPrestamo}</td>
@@ -860,33 +871,34 @@ function modificarPrestamo(prestamo) {
               <button class="btn btn-danger eliminar-btn" data="${id}">Eliminar</button>
             </td>
           `;
-        }
+            }
 
-        // Mostrar mensaje de éxito
-        Swal.fire({
-          title: "¡Éxito!",
-          text: "Préstamo modificado exitosamente",
-          icon: "success",
+            // Mostrar mensaje de éxito
+            Swal.fire({
+              title: "¡Éxito!",
+              text: "Préstamo modificado exitosamente",
+              icon: "success",
+            });
+
+            // Asignar eventos a los nuevos botones de eliminar y modificar
+            asignarEventosEliminarPrestamos();
+            asignarEventosModificarPrestamos();
+          } else {
+            return response.text().then((text) => {
+              throw new Error(text);
+            });
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Hubo un problema con la solicitud: " + error.message,
+          });
         });
-
-        // Asignar eventos a los nuevos botones de eliminar y modificar
-        asignarEventosEliminarPrestamos();
-        asignarEventosModificarPrestamos();
-      } else {
-        return response.text().then((text) => {
-          throw new Error(text);
-        });
-      }
-    })
-    .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema con la solicitud: " + error.message,
-      });
-    });
-}
-
+    }
+  });
+});
 // BUSQUEDA DE PRESTAMOS ######################################################################
 
 // Obtener referencias a los elementos del DOM
