@@ -6,13 +6,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>BIBLIOGO</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-
-    <!-- Favicon -->
-    <link href=" {% static 'img/favicon.ico' %}  " rel="icon">
+    <link rel="icon" href="{% static 'img/logoWhite.png' %}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +38,7 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -77,6 +76,12 @@
 
                     <a href="/form" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Formularios</a>
                     <a href="/table" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tablas</a>
+                    <a href="#" id="imprimirBtn" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Reporte de Tablas</a>
+                    <script>
+                        document.getElementById('imprimirBtn').addEventListener('click', function() {
+                            window.print();
+                        });
+                        </script>
                 </div>
             </nav>
         </div>
