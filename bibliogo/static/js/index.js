@@ -782,8 +782,8 @@ function mostrarPanelModificarPrestamo(id) {
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelarModificarPrestamo">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="enviarModificarPrestamo">Guardar cambios</button>
+          <button type="button"  class="btn btn-secondary" data-dismiss="modal" id="cancelarModificarPrestamo">Cancelar</button>
+          <button type="button"  class="btn btn-primary" id="enviarModificarPrestamo">Guardar cambios</button>
         </div>
       </div>
     </div>
